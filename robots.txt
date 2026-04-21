@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://growelectronics.example/sitemap.xml

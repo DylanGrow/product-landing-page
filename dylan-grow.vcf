@@ -1,0 +1,9 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Dylan Grow
+ORG:Grow Electronics
+TEL;TYPE=CELL:+12523490830
+ADR;TYPE=WORK:;;New Bern;NC;;USA
+URL:https://growelectronics.example
+EMAIL:dylan@growelectronics.example
+END:VCARD
