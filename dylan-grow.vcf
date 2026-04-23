@@ -1,9 +1,9 @@
 BEGIN:VCARD
 VERSION:3.0
-FN:Dylan Grow
-ORG:Grow Electronics
-TEL;TYPE=CELL:+12523490830
+FN:Tomás Estrada
+ORG: Construction
+TEL;TYPE=CELL:+(252) 876-7970
 ADR;TYPE=WORK:;;New Bern;NC;;USA
-URL:https://growelectronics.example
-EMAIL:dylan@growelectronics.example
+URL:https://dylangrow.github.io/
+EMAIL:estradatomas2024@outlook.com
 END:VCARD
