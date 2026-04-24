@@ -124,7 +124,7 @@ nav{
   box-shadow:0 20px 40px rgba(0,0,0,0.2);
 }
 
-textarea{
+#translatorPanel textarea{
   width:100%;
   padding:8px;
 }
@@ -133,6 +133,19 @@ textarea{
   margin-top:8px;
   min-height:40px;
   font-size:14px;
+}
+
+/* MIC BUTTON */
+#micBtn{
+  margin-top:8px;
+  padding:10px;
+  width:100%;
+  border:none;
+  border-radius:8px;
+  background:#f97316;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
 }
 
 /* MOBILE */
@@ -164,47 +177,123 @@ textarea{
 <div class="section" id="quote">
   <h2>Request a quote</h2>
   <div class="form">
-    <input placeholder="Name">
-    <input placeholder="Phone">
-    <textarea placeholder="Project details"></textarea>
-    <button class="btn primary">Send Request</button>
+    <input id="name" placeholder="Name">
+    <input id="phone" placeholder="Phone">
+    <textarea id="details" placeholder="Project details"></textarea>
+    <button class="btn primary" onclick="sendLead()">Send Request</button>
   </div>
 </div>
 
-<!-- TRANSLATOR BUTTON -->
+<!-- TRANSLATOR -->
 <div id="translatorBtn">🌐 Español</div>
 
-<!-- TRANSLATOR PANEL -->
 <div id="translatorPanel">
   <textarea id="input" placeholder="Type or speak..."></textarea>
   <div id="output"></div>
+  <button id="micBtn">🎤 Hold to speak</button>
 </div>
 
 <script>
+// Toggle panel
 const btn = document.getElementById("translatorBtn");
 const panel = document.getElementById("translatorPanel");
-const input = document.getElementById("input");
-const output = document.getElementById("output");
-
 btn.onclick = () => {
   panel.style.display = panel.style.display === "block" ? "none" : "block";
 };
 
+// Elements
+const input = document.getElementById("input");
+const output = document.getElementById("output");
+const micBtn = document.getElementById("micBtn");
+
+// Detect language
+function detectLang(text){
+  return /[áéíóúñ¿¡]/i.test(text) ? "es" : "en";
+}
+
+// Translate
 async function translate(text){
-  if(!text) return output.textContent = "";
+  if(!text.trim()){
+    output.textContent="";
+    return;
+  }
+  const from = detectLang(text);
+  const to = from==="es"?"en":"es";
+
   try{
-    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=auto|en`);
+    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`);
     const data = await res.json();
-    output.textContent = data.responseData.translatedText;
+    const result = data.responseData.translatedText;
+    output.textContent = result;
+    speak(result,to);
   }catch{
-    output.textContent = "Translation error";
+    output.textContent="Translation error";
   }
 }
 
+// TTS
+function speak(text,lang){
+  if(!speechSynthesis) return;
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang=lang==="es"?"es-MX":"en-US";
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
+// Input typing
 input.addEventListener("input",()=>{
   clearTimeout(window.t);
-  window.t = setTimeout(()=>translate(input.value),400);
+  window.t=setTimeout(()=>translate(input.value),400);
 });
+
+// Voice
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+let rec,holding=false;
+
+if(SpeechRecognition){
+  rec=new SpeechRecognition();
+  rec.onresult=(e)=>{
+    const text=e.results[0][0].transcript;
+    input.value=text;
+    translate(text);
+  };
+  rec.onstart=()=>{
+    micBtn.style.background="#dc2626";
+    micBtn.textContent="Listening...";
+  };
+  rec.onend=()=>{
+    micBtn.style.background="#f97316";
+    micBtn.textContent="🎤 Hold to speak";
+    holding=false;
+  };
+}else{
+  micBtn.disabled=true;
+  micBtn.textContent="Mic not supported";
+}
+
+micBtn.onmousedown=()=>{
+  if(!rec||holding)return;
+  holding=true;
+  rec.start();
+};
+micBtn.onmouseup=()=>{
+  if(rec)rec.stop();
+};
+
+// Lead form
+function sendLead(){
+  const name=document.getElementById("name").value;
+  const phone=document.getElementById("phone").value;
+  const details=document.getElementById("details").value;
+
+  if(!name||!phone){
+    alert("Enter name and phone");
+    return;
+  }
+
+  const msg=`Quote request\nName: ${name}\nPhone: ${phone}\nDetails: ${details}`;
+  window.location.href="sms:+12528767970?body="+encodeURIComponent(msg);
+}
 </script>
 
 </body>
