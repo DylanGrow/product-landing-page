@@ -28,7 +28,11 @@ nav{
   align-items:center;
 }
 
-.logo{font-family:'DM Serif Display';font-size:20px}
+.logo{
+  font-family:'DM Serif Display';
+  font-size:20px;
+}
+
 .nav-cta{
   background:#e8a020;
   padding:10px 18px;
@@ -40,45 +44,94 @@ nav{
 
 /* HERO */
 .hero{
-  padding:60px 20px;
+  padding:70px 20px;
   text-align:center;
-  background:#1a2e4a;
+  background:linear-gradient(135deg,#1a2e4a,#0f1d2e);
   color:white;
 }
 
 .hero h1{
   font-family:'DM Serif Display';
-  font-size:34px;
-  margin-bottom:10px;
+  font-size:38px;
+  line-height:1.2;
+  margin-bottom:12px;
 }
 
 .hero p{
   color:#cbd5e1;
-  margin-bottom:20px;
+  max-width:600px;
+  margin:0 auto 22px;
+  font-size:16px;
 }
 
 .btn{
-  display:inline-block;
-  padding:12px 22px;
-  border-radius:6px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:13px 22px;
+  border-radius:8px;
+  font-weight:600;
   text-decoration:none;
   margin:6px;
-  font-weight:600;
+  transition:.2s ease;
 }
 
-.primary{background:#e8a020;color:#0f1d2e}
-.secondary{border:1px solid white;color:white}
+.primary{
+  background:#e8a020;
+  color:#0f1d2e;
+  box-shadow:0 8px 20px rgba(232,160,32,0.25);
+  animation:softPulse 2.8s infinite;
+}
 
-/* SECTION */
+.primary:hover{
+  transform:translateY(-2px);
+}
+
+.secondary{
+  border:1px solid rgba(255,255,255,0.35);
+  color:white;
+}
+
+.secondary:hover{
+  transform:translateY(-2px);
+  border-color:white;
+}
+
+@keyframes softPulse{
+  0%{box-shadow:0 8px 20px rgba(232,160,32,0.25);}
+  50%{box-shadow:0 12px 30px rgba(232,160,32,0.35);}
+  100%{box-shadow:0 8px 20px rgba(232,160,32,0.25);}
+}
+
+/* TRUST BAR */
+.trust{
+  display:flex;
+  justify-content:center;
+  gap:18px;
+  padding:14px;
+  font-size:13px;
+  background:white;
+  color:#64748b;
+  border-bottom:1px solid #e2e8f0;
+}
+
+/* SECTIONS */
 .section{
-  padding:40px 20px;
+  padding:60px 20px;
   max-width:900px;
   margin:auto;
 }
 
 .section h2{
   font-family:'DM Serif Display';
+  font-size:28px;
   margin-bottom:10px;
+}
+
+.section p{
+  color:#5a6a7e;
+  line-height:1.7;
 }
 
 /* FORM */
@@ -89,7 +142,8 @@ nav{
   border:1px solid #d0d8e4;
 }
 
-.form input,.form textarea{
+.form input,
+.form textarea{
   width:100%;
   margin-bottom:10px;
   padding:10px;
@@ -97,60 +151,76 @@ nav{
   border-radius:6px;
 }
 
-/* FLOATING TRANSLATOR BUTTON */
+/* TRANSLATOR BUTTON */
 #translatorBtn{
   position:fixed;
-  bottom:20px;
-  right:20px;
-  background:#0ea5e9;
+  bottom:18px;
+  right:18px;
+
+  background:linear-gradient(135deg,#0ea5e9,#0284c7);
   color:white;
-  padding:12px 16px;
+
+  padding:14px 18px;
   border-radius:999px;
+
+  font-weight:600;
+
+  box-shadow:0 12px 30px rgba(2,132,199,0.35);
   cursor:pointer;
-  font-size:14px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+
+  min-height:52px;
 }
 
-/* TRANSLATOR PANEL */
+/* PANEL */
 #translatorPanel{
   position:fixed;
-  bottom:80px;
-  right:20px;
-  width:320px;
+  left:0;
+  right:0;
+  bottom:0;
+
+  max-width:480px;
+  margin:auto;
+
   background:white;
-  border-radius:14px;
-  padding:12px;
-  display:none;
-  box-shadow:0 20px 40px rgba(0,0,0,0.2);
+  border-radius:16px 16px 0 0;
+
+  padding:16px;
+
+  transform:translateY(100%);
+  transition:.3s ease;
+
+  box-shadow:0 -10px 30px rgba(0,0,0,0.25);
+}
+
+#translatorPanel.open{
+  transform:translateY(0);
 }
 
 #translatorPanel textarea{
   width:100%;
-  padding:8px;
+  padding:10px;
 }
 
 #output{
-  margin-top:8px;
+  margin-top:10px;
   min-height:40px;
   font-size:14px;
 }
 
-/* MIC BUTTON */
 #micBtn{
-  margin-top:8px;
-  padding:10px;
+  margin-top:10px;
   width:100%;
+  padding:10px;
   border:none;
   border-radius:8px;
   background:#f97316;
   color:white;
   font-weight:600;
-  cursor:pointer;
 }
 
 /* MOBILE */
 @media(max-width:600px){
-  .hero h1{font-size:26px}
+  .hero h1{font-size:28px}
 }
 </style>
 </head>
@@ -159,7 +229,19 @@ nav{
 
 <nav>
   <div class="logo">Estrada Painting</div>
-  <a class="nav-cta" href="tel:+12528767970">Call Now</a>
+  <div style="display:flex; gap:10px; align-items:center;">
+    <button id="langToggle" style="
+      background:#0ea5e9;
+      color:white;
+      border:none;
+      padding:6px 12px;
+      border-radius:6px;
+      font-weight:600;
+      cursor:pointer;
+    ">ES</button>
+
+    <a class="nav-cta" href="tel:+12528767970">Call Now</a>
+  </div>
 </nav>
 
 <div class="hero">
@@ -169,13 +251,20 @@ nav{
   <a class="btn secondary" href="tel:+12528767970">Call</a>
 </div>
 
+<div class="trust">
+  <span>✔ Licensed</span>
+  <span>✔ Insured</span>
+  <span>✔ 10+ Years</span>
+</div>
+
 <div class="section">
   <h2>Why choose us</h2>
-  <p>10+ years experience. Licensed & insured. We show up on time and finish right.</p>
+  <p>We deliver professional painting services with clean execution, fair pricing, and reliable scheduling.</p>
 </div>
 
 <div class="section" id="quote">
   <h2>Request a quote</h2>
+
   <div class="form">
     <input id="name" placeholder="Name">
     <input id="phone" placeholder="Phone">
@@ -188,82 +277,123 @@ nav{
 <div id="translatorBtn">🌐 Español</div>
 
 <div id="translatorPanel">
+  <div style="width:40px;height:4px;background:#cbd5e1;border-radius:2px;margin:0 auto 10px;"></div>
+
   <textarea id="input" placeholder="Type or speak..."></textarea>
   <div id="output"></div>
   <button id="micBtn">🎤 Hold to speak</button>
 </div>
 
 <script>
-// Toggle panel
-const btn = document.getElementById("translatorBtn");
-const panel = document.getElementById("translatorPanel");
-btn.onclick = () => {
-  panel.style.display = panel.style.display === "block" ? "none" : "block";
+
+/* ===== BILINGUAL SITE ===== */
+const langToggle = document.getElementById("langToggle");
+
+let currentLang = localStorage.getItem("site_lang") || "en";
+
+const content = {
+  en:{
+    heroTitle:"Interior & Exterior Painting in Eastern NC",
+    heroSub:"Fast. Clean. Reliable. English & Spanish support."
+  },
+  es:{
+    heroTitle:"Pintura interior y exterior en Carolina del Norte",
+    heroSub:"Rápido. Limpio. Confiable. Soporte en inglés y español."
+  }
 };
 
-// Elements
-const input = document.getElementById("input");
-const output = document.getElementById("output");
-const micBtn = document.getElementById("micBtn");
+function updateLang(lang){
+  currentLang = lang;
+  localStorage.setItem("site_lang",lang);
 
-// Detect language
-function detectLang(text){
-  return /[áéíóúñ¿¡]/i.test(text) ? "es" : "en";
+  document.querySelector(".hero h1").textContent = content[lang].heroTitle;
+  document.querySelector(".hero p").textContent = content[lang].heroSub;
+
+  langToggle.textContent = lang==="en"?"ES":"EN";
 }
 
-// Translate
-async function translate(text){
-  if(!text.trim()){
-    output.textContent="";
-    return;
+langToggle.onclick=()=>{
+  updateLang(currentLang==="en"?"es":"en");
+};
+
+updateLang(currentLang);
+
+/* ===== TRANSLATOR ===== */
+const btn=document.getElementById("translatorBtn");
+const panel=document.getElementById("translatorPanel");
+const input=document.getElementById("input");
+const output=document.getElementById("output");
+const micBtn=document.getElementById("micBtn");
+
+btn.onclick=()=>panel.classList.toggle("open");
+
+/* swipe down close */
+let startY=0;
+panel.addEventListener("touchstart",e=>{
+  startY=e.touches[0].clientY;
+});
+panel.addEventListener("touchmove",e=>{
+  if(e.touches[0].clientY-startY>80){
+    panel.classList.remove("open");
   }
-  const from = detectLang(text);
-  const to = from==="es"?"en":"es";
+});
+
+/* translate */
+function detectLang(t){
+  return /[áéíóúñ¿¡]/.test(t)?"es":"en";
+}
+
+async function translate(text){
+  if(!text.trim()) return;
+
+  const from=detectLang(text);
+  const to=from==="es"?"en":"es";
+
+  output.textContent="Translating...";
 
   try{
-    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`);
-    const data = await res.json();
-    const result = data.responseData.translatedText;
-    output.textContent = result;
-    speak(result,to);
+    const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`);
+    const d=await r.json();
+    const result=d.responseData.translatedText;
+
+    output.textContent=result;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(new SpeechSynthesisUtterance(result));
+
+    localStorage.setItem("last_translation_input",text);
+    localStorage.setItem("last_translation_output",result);
   }catch{
     output.textContent="Translation error";
   }
 }
 
-// TTS
-function speak(text,lang){
-  if(!speechSynthesis) return;
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang=lang==="es"?"es-MX":"en-US";
-  speechSynthesis.cancel();
-  speechSynthesis.speak(u);
-}
-
-// Input typing
 input.addEventListener("input",()=>{
   clearTimeout(window.t);
-  window.t=setTimeout(()=>translate(input.value),400);
+  window.t=setTimeout(()=>translate(input.value),300);
 });
 
-// Voice
+/* speech */
 const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
 let rec,holding=false;
 
 if(SpeechRecognition){
   rec=new SpeechRecognition();
-  rec.onresult=(e)=>{
-    const text=e.results[0][0].transcript;
-    input.value=text;
-    translate(text);
+
+  rec.onresult=e=>{
+    const t=e.results[0][0].transcript;
+    input.value=t;
+    translate(t);
   };
-  rec.onstart=()=>{
-    micBtn.style.background="#dc2626";
-    micBtn.textContent="Listening...";
+
+  micBtn.onpointerdown=()=>{
+    if(!rec||holding)return;
+    holding=true;
+    navigator.vibrate?.(40);
+    rec.start();
   };
-  rec.onend=()=>{
-    micBtn.style.background="#f97316";
-    micBtn.textContent="🎤 Hold to speak";
+
+  micBtn.onpointerup=()=>{
+    rec.stop();
     holding=false;
   };
 }else{
@@ -271,29 +401,18 @@ if(SpeechRecognition){
   micBtn.textContent="Mic not supported";
 }
 
-micBtn.onmousedown=()=>{
-  if(!rec||holding)return;
-  holding=true;
-  rec.start();
-};
-micBtn.onmouseup=()=>{
-  if(rec)rec.stop();
-};
-
-// Lead form
+/* lead form */
 function sendLead(){
-  const name=document.getElementById("name").value;
-  const phone=document.getElementById("phone").value;
-  const details=document.getElementById("details").value;
+  const n=document.getElementById("name").value;
+  const p=document.getElementById("phone").value;
+  const d=document.getElementById("details").value;
 
-  if(!name||!phone){
-    alert("Enter name and phone");
-    return;
-  }
+  if(!n||!p) return alert("Enter name and phone");
 
-  const msg=`Quote request\nName: ${name}\nPhone: ${phone}\nDetails: ${details}`;
+  const msg=`Quote\n${n}\n${p}\n${d}`;
   window.location.href="sms:+12528767970?body="+encodeURIComponent(msg);
 }
+
 </script>
 
 </body>
